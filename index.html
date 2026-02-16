@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Core | The Internet, Condensed</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --bg: #050505;
+            --accent: #ffffff;
+            --secondary: #111111;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--bg);
+            color: var(--accent);
+            overflow-x: hidden;
+        }
+
+        .blur-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #111 0%, #050505 100%);
+        }
+
+        .orb {
+            position: absolute;
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+        }
+
+        .tool-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+        }
+
+        .tool-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+        }
+
+        .grid-custom {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .floating-nav {
+            background: rgba(5, 5, 5, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero-text {
+            font-size: clamp(2.5rem, 10vw, 6rem);
+            line-height: 0.95;
+            letter-spacing: -0.06em;
+            font-weight: 700;
+        }
+
+        /* Scanline Effect */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+            background-size: 100% 4px, 3px 100%;
+            z-index: 100;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: #222; border-radius: 3px; }
+
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="blur-gradient"></div>
+    <div class="orb" id="orb-1" style="top: -10%; left: -10%;"></div>
+    <div class="orb" id="orb-2" style="bottom: -10%; right: -10%;"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-8 left-1/2 -translate-x-1/2 z-[110] floating-nav px-8 py-4 rounded-2xl flex items-center space-x-10">
+        <div class="flex items-center gap-3">
+            <div class="w-6 h-6 border-2 border-white rounded-full flex items-center justify-center">
+                <div class="w-1.5 h-1.5 bg-white rounded-full"></div>
+            </div>
+            <span class="font-bold tracking-tighter text-lg uppercase">Core</span>
+        </div>
+        <div class="hidden md:flex items-center space-x-8 text-xs font-bold tracking-widest uppercase opacity-40">
+            <a href="#" class="hover:opacity-100 transition-opacity">Tools</a>
+            <a href="#" class="hover:opacity-100 transition-opacity">Privacy</a>
+            <a href="#" class="hover:opacity-100 transition-opacity">Nodes</a>
+        </div>
+        <button class="bg-white text-black text-[10px] font-black px-4 py-2 rounded-lg uppercase tracking-widest hover:scale-105 transition-transform">
+            Launch
+        </button>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="min-h-screen flex flex-col items-center justify-center px-6 pt-32 text-center">
+        <div class="max-w-5xl">
+            <h1 class="hero-text mb-10">
+                EVERYTHING <br>
+                <span class="text-transparent" style="-webkit-text-stroke: 1px rgba(255,255,255,0.3)">IN ONE PLACE.</span>
+            </h1>
+            <p class="text-lg md:text-2xl text-white/50 mb-16 max-w-3xl mx-auto leading-relaxed font-light">
+                The "Big Web" is cluttered, tracked, and broken. <strong>Core</strong> gathers every essential utility into a single, private, and open-source ecosystem.
+            </p>
+            <div class="flex flex-col md:flex-row justify-center gap-6">
+                <a href="#toolkit" class="group bg-white text-black px-10 py-5 rounded-2xl font-bold flex items-center justify-center gap-3 hover:pr-8 transition-all">
+                    Access Toolkit <i class="fa-solid fa-arrow-right text-sm group-hover:translate-x-2 transition-transform"></i>
+                </a>
+                <button class="bg-white/5 border border-white/10 px-10 py-5 rounded-2xl font-bold hover:bg-white/10 transition-all">
+                    The Manifesto
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Toolkit Grid -->
+    <section id="toolkit" class="max-w-7xl mx-auto px-6 py-40">
+        <div class="grid md:grid-cols-2 gap-20 items-end mb-24">
+            <div class="reveal">
+                <span class="text-xs font-bold tracking-[0.3em] uppercase text-white/30 mb-4 block">Centralized Utility</span>
+                <h2 class="text-5xl font-bold tracking-tighter">Small Web, <br>Unlimited Power.</h2>
+            </div>
+            <p class="text-white/40 text-lg reveal" style="transition-delay: 0.2s;">
+                We've rebuilt the tools you use daily from the ground up. No accounts, no data harvesting, just pure functionality running locally in your browser.
+            </p>
+        </div>
+
+        <div class="grid-custom">
+            <!-- File Alchemy -->
+            <div class="tool-card p-10 rounded-[2.5rem] reveal">
+                <div class="text-white/20 mb-8 text-4xl"><i class="fa-solid fa-shuffle"></i></div>
+                <h3 class="text-2xl font-bold mb-4">File Alchemy</h3>
+                <p class="text-white/40 leading-relaxed mb-8">Convert, compress, and edit media files. 100% client-side processing. Your files never touch our servers.</p>
+                <div class="flex gap-2">
+                    <span class="px-3 py-1 bg-white/5 rounded-full text-[10px] uppercase font-bold text-white/30">PDF</span>
+                    <span class="px-3 py-1 bg-white/5 rounded-full text-[10px] uppercase font-bold text-white/30">Video</span>
+                    <span class="px-3 py-1 bg-white/5 rounded-full text-[10px] uppercase font-bold text-white/30">Image</span>
+                </div>
+            </div>
+
+            <!-- News/Signal -->
+            <div class="tool-card p-10 rounded-[2.5rem] reveal" style="transition-delay: 0.1s;">
+                <div class="text-white/20 mb-8 text-4xl"><i class="fa-solid fa-satellite-dish"></i></div>
+                <h3 class="text-2xl font-bold mb-4">The Signal</h3>
+                <p class="text-white/40 leading-relaxed mb-8">An unbiased news aggregate without the noise. Real-time updates from global sources, filtered by you.</p>
+                <div class="flex gap-2">
+                    <span class="px-3 py-1 bg-white/5 rounded-full text-[10px] uppercase font-bold text-white/30">RSS</span>
+                    <span class="px-3 py-1 bg-white/5 rounded-full text-[10px] uppercase font-bold text-white/30">Global</span>
+                </div>
+            </div>
+
+            <!-- Privacy -->
+            <div class="tool-card p-10 rounded-[2.5rem] reveal" style="transition-delay: 0.2s;">
+                <div class="text-white/20 mb-8 text-4xl"><i class="fa-solid fa-mask"></i></div>
+                <h3 class="text-2xl font-bold mb-4">Ghost Node</h3>
+                <p class="text-white/40 leading-relaxed mb-8">Generate burner emails, check password leaks, and scrub EXIF data from your photos instantly.</p>
+                <div class="flex gap-2">
+                    <span class="px-3 py-1 bg-white/5 rounded-full text-[10px] uppercase font-bold text-white/30">Anon</span>
+                    <span class="px-3 py-1 bg-white/5 rounded-full text-[10px] uppercase font-bold text-white/30">Security</span>
+                </div>
+            </div>
+
+            <!-- Dev Suite -->
+            <div class="tool-card p-10 rounded-[2.5rem] reveal" style="transition-delay: 0.3s;">
+                <div class="text-white/20 mb-8 text-4xl"><i class="fa-solid fa-terminal"></i></div>
+                <h3 class="text-2xl font-bold mb-4">Dev Suite</h3>
+                <p class="text-white/40 leading-relaxed mb-8">JSON, Base64, Diff, and Markdown. The essential toolbox for developers, simplified.</p>
+                <div class="flex gap-2">
+                    <span class="px-3 py-1 bg-white/5 rounded-full text-[10px] uppercase font-bold text-white/30">Formatter</span>
+                    <span class="px-3 py-1 bg-white/5 rounded-full text-[10px] uppercase font-bold text-white/30">Encoders</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-40 px-6">
+        <div class="max-w-4xl mx-auto bg-white text-black p-16 md:p-24 rounded-[4rem] text-center reveal">
+            <h2 class="text-5xl md:text-7xl font-bold tracking-tighter mb-8 italic">Ready to go small?</h2>
+            <p class="text-xl mb-12 opacity-70">Experience the internet without the bloat.</p>
+            <button class="bg-black text-white px-12 py-6 rounded-2xl font-black uppercase tracking-[0.2em] hover:scale-105 transition-transform">
+                Initialize Core
+            </button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 py-32 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-16">
+            <div class="max-w-xs">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-5 h-5 border-2 border-white rounded-full"></div>
+                    <span class="font-bold tracking-tighter text-xl uppercase">Core</span>
+                </div>
+                <p class="text-white/30 text-sm leading-relaxed">
+                    Designed to replace your bookmarks with a single, secure entry point to the web. Built for privacy. Built for you.
+                </p>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-16">
+                <div>
+                    <h4 class="font-bold text-xs uppercase tracking-widest mb-8 text-white/20">Product</h4>
+                    <ul class="space-y-4 text-sm font-medium">
+                        <li><a href="#" class="hover:text-white/60">Toolkit</a></li>
+                        <li><a href="#" class="hover:text-white/60">Open Source</a></li>
+                        <li><a href="#" class="hover:text-white/60">Manifesto</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-xs uppercase tracking-widest mb-8 text-white/20">Community</h4>
+                    <ul class="space-y-4 text-sm font-medium">
+                        <li><a href="#" class="hover:text-white/60">GitHub</a></li>
+                        <li><a href="#" class="hover:text-white/60">Discord</a></li>
+                        <li><a href="#" class="hover:text-white/60">Twitter</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto mt-32 pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between text-[10px] font-bold uppercase tracking-widest text-white/20">
+            <span>© 2024 Core Project</span>
+            <span>All tools are local-first</span>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll Reveal
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Interactive Background
+        document.addEventListener('mousemove', (e) => {
+            const orb1 = document.getElementById('orb-1');
+            const orb2 = document.getElementById('orb-2');
+            
+            const x = (e.clientX / window.innerWidth - 0.5) * 60;
+            const y = (e.clientY / window.innerHeight - 0.5) * 60;
+            
+            orb1.style.transform = `translate(${x}px, ${y}px)`;
+            orb2.style.transform = `translate(${-x}px, ${-y}px)`;
+        });
+
+        // Click interaction on cards
+        document.querySelectorAll('.tool-card').forEach(card => {
+            card.addEventListener('click', () => {
+                card.style.transform = 'scale(0.98)';
+                setTimeout(() => card.style.transform = 'translateY(-8px)', 150);
+            });
+        });
+    </script>
+</body>
+</html>
